@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Execução de Pipeline MIPS</title>
+    <style>
+        /* Estilo Geral */
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        /* Cabeçalho e Nome */
+        h1,
+        h2,
+        h3 {
+            color: #530957;
+        }
+
+        .author {
+            font-size: 1rem;
+            text-align: center;
+            /* Alinha o texto à esquerda */
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .author span {
+            display: inline-block;
+            background-color: #dce4f7;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        /* Tabelas */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #7b869e;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .highlight {
+            background-color: #ffeb3b;
+            font-weight: bold;
+        }
+
+        /* Links */
+        a {
+            color: #110212;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Rodapé */
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 10px;
+            background-color: #92133b;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Nome do Autor -->
+    <div class="author">
+        <span>By: Julio Ferreira</span>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <h1>Execução de Pipeline MIPS</h1>
+
+    <h2>Introdução</h2>
+    <p>O MIPS (Microprocessor without Interlocked Pipeline Stages) é uma arquitetura RISC (Reduced Instruction Set
+        Computer) que utiliza um pipeline de cinco estágios para melhorar o desempenho na execução de instruções. Os
+        cinco estágios do pipeline são:</p>
+    <ul>
+        <li><strong>IF (Instruction Fetch)</strong>: Busca da instrução na memória.</li>
+        <li><strong>ID (Instruction Decode)</strong>: Decodificação da instrução e leitura dos registradores.</li>
+        <li><strong>EXE (Execute)</strong>: Execução da operação, como soma, subtração, ou cálculo do endereço de
+            memória.</li>
+        <li><strong>MEM (Memory Access)</strong>: Acesso à memória para leitura ou escrita.</li>
+        <li><strong>WB (Write Back)</strong>: Escrita do resultado no registrador de destino.</li>
+    </ul>
+
+    <h2>Descrição das Instruções</h2>
+    <ul>
+        <li><strong>addiu $1, $zero, 10</strong>: Soma o valor imediato 10 ao conteúdo do registrador $zero e armazena o
+            resultado no registrador $1.</li>
+        <li><strong>sw $1, 12($fp)</strong>: Armazena o valor do registrador $1 no endereço de memória correspondente a
+            12($fp).</li>
+        <li><strong>addiu $2, $zero, 20</strong>: Soma 20 ao conteúdo de $zero e armazena em $2.</li>
+        <li><strong>sw $2, 8($fp)</strong>: Armazena o valor de $2 no endereço 8($fp).</li>
+        <li><strong>lw $1, 12($fp)</strong>: Carrega o valor armazenado em 12($fp) no registrador $1.</li>
+        <li><strong>lw $2, 8($fp)</strong>: Carrega o valor armazenado em 8($fp) no registrador $2.</li>
+        <li><strong>addiu $3, $1, $2</strong>: Soma os valores de $1 e $2, armazenando o resultado em $3.</li>
+        <li><strong>sw $3, 12($fp)</strong>: Armazena o valor de $3 no endereço 12($fp).</li>
+    </ul>
+    <br>
+    <br>
+    <h2>Pipeline de Instruções MIPS</h2>
+    <p>A tabela abaixo mostra a execução das instruções ao longo dos ciclos de clock no pipeline. Cada célula representa
+        o estágio do pipeline sendo executado em um ciclo específico.</p>
+
+    <table>
+        <tr>
+            <th>Instrução</th>
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+            <th>5</th>
+            <th>6</th>
+            <th>7</th>
+            <th>8</th>
+            <th>9</th>
+            <th>10</th>
+            <th>11</th>
+            <th>12</th>
+            <th>13</th>
+            <th>14</th>
+            <th>15</th>
+            <th>16</th>
+            <th>17</th>
+            <th>18</th>
+            <th>19</th>
+            <th>20</th>
+        </tr>
+        <tr>
+            <td>addiu $1, $zero, 10</td>
+            <td>IF</td>
+            <td>ID</td>
+            <td>EXE</td>
+            <td>MEM</td>
+            <td>WB</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>sw $1, 12($fp)</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>IF</td>
+            <td>ID</td>
+            <td>EXE</td>
+            <td>MEM</td>
+            <td>WB</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>addiu $2, $zero, 20</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>IF</td>
+            <td>ID</td>
+            <td>EXE</td>
+            <td>MEM</td>
+            <td>WB</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>sw $2, 8($fp)</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>IF</td>
+            <td>ID</td>
+            <td>EXE</td>
+            <td>MEM</td>
+            <td>WB</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>lw $1, 12($fp)</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>IF</td>
+            <td>ID</td>
+            <td>EXE</td>
+            <td>MEM</td>
+            <td>WB</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>lw $1, 12($fp)</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>IF</td>
+            <td>ID</td>
+            <td>EXE</td>
+            <td>MEM</td>
+            <td>WB</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>addiu $3, $1, $2</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>IF</td>
+            <td>ID</td>
+            <td>EXE</td>
+            <td>MEM</td>
+            <td>WB</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>sw $3, 12($fp)</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>IF</td>
+            <td>ID</td>
+            <td>EXE</td>
+            <td>MEM</td>
+            <td>WB</td>
+        </tr>
+    </table>
+
+    <h1>Por que LW e SW causam Stalls</h1>
+
+    <h2>1. O que é um <em>stall</em>?</h2>
+    <p>Um <em>stall</em> ocorre quando o processador é obrigado a pausar temporariamente a execução de instruções no
+        pipeline, porque uma etapa do pipeline não pode ser completada imediatamente. Isso acontece para evitar erros
+        devido a dependências ou falta de recursos.</p>
+
+    <h2>2. Por que LW e SW causam <em>stalls</em>?</h2>
+
+    <h3>LW (Load Word)</h3>
+    <ul>
+        <li><strong>Dependência de dados:</strong> A instrução <code>LW</code> carrega um dado da memória e o coloca em
+            um registrador. Se uma instrução subsequente precisa desse dado imediatamente, o processador precisa esperar
+            o término do <code>LW</code> (ou seja, até o dado estar disponível). Isso causa um <em>stall</em>, já que o
+            pipeline não pode avançar para a próxima instrução que depende desse valor.</li>
+    </ul>
+    <ul>
+        <li><strong>Latência da memória:</strong> O acesso à memória é mais lento do que o processamento no pipeline.
+            Isso pode introduzir atrasos mesmo sem dependências de dados.</li>
+    </ul>
+
+    <h3>SW (Store Word)</h3>
+    <ul>
+        <li><strong>Conflitos de acesso à memória:</strong> A instrução <code>SW</code> armazena o valor de um
+            registrador na memória. Se há outra instrução que também acessa a memória simultaneamente (como outro
+            <code>LW</code> ou <code>SW</code>), pode ocorrer um <em>stall</em> para resolver o conflito.</li>
+        <li><strong>Ordem de execução:</strong> Se houver dependências com outras instruções que calculam o endereço de
+            memória ou o valor a ser armazenado, o processador pode precisar pausar até que as etapas anteriores do
+            pipeline estejam concluídas.</li>
+    </ul>
+
+    <h2>3. Outras instruções que também causam <em>stalls</em></h2>
+    <ul>
+        <li><strong>Branch/Jump (Desvios condicionais):</strong> Instruções de desvio (como <code>BEQ</code>,
+            <code>BNE</code>, <code>JMP</code>) podem causar <em>stalls</em> devido à incerteza sobre qual caminho de
+            execução o programa seguirá.</li>
+        <li><strong>Instruções aritméticas com latência maior:</strong> Operações como multiplicação (<code>MUL</code>)
+            ou divisão (<code>DIV</code>) podem causar <em>stalls</em> porque levam mais ciclos para serem processadas.
+        </li>
+        <li><strong>Acesso à memória (Cache Miss):</strong> Instruções que acessam a memória podem sofrer atrasos
+            significativos se os dados não estiverem na cache (<em>cache miss</em>).</li>
+    </ul>
+
+    <h2>4. Soluções para minimizar <em>stalls</em></h2>
+    <ul>
+        <li><strong>Reordenamento de instruções:</strong> O compilador pode reorganizar as instruções para evitar
+            dependências imediatas.</li>
+        <li><strong>Encadeamento (Forwarding):</strong> O processador pode encaminhar os resultados diretamente entre
+            etapas do pipeline para reduzir atrasos causados por dependências de dados.</li>
+        <li><strong>Previsão de desvio (<em>branch prediction</em>):</strong> Ajuda a minimizar <em>stalls</em> causados
+            por desvios condicionais.</li>
+        <li><strong>Hierarquia de memória eficiente:</strong> Caches bem projetadas podem reduzir atrasos de acesso à
+            memória.</li>
+    </ul>
+
+    <!-- Rodapé -->
+    <footer>
+        <p>
+            Este trabalho está licenciado sob a
+            <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">
+                Licença Creative Commons Atribuição 4.0 Internacional.
+            </a>
+        </p>
+        <p>
+            <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">
+                <img src="https://licensebuttons.net/l/by/4.0/88x31.png" alt="Licença Creative Commons">
+            </a>
+        </p>
+    </footer>
+</body>
+
+</html>
